@@ -9,9 +9,8 @@
 <body bgcolor="FEF9E7">
 <font face="verdana">
 	<h1>Hello!</h1>
-
 	<p>
-	<p>This is a <font color="blue">Blue Hexagon</font>.
+	<p>This is a <font color="blue">Blue Octagon</font>.
 	<p>
 	<p>
 	<svg height="200" width="200" xmlns="http://www.w3.org/2000/svg">

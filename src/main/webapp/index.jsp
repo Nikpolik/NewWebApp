@@ -30,6 +30,7 @@
         <li><a href="Square.jsp">Square<a></li>
         <li><a href="Pentagon.jsp">Pentagon</a></li>
         <li><a href="Hexagon.jsp">Hexagon</a></li>
+        <%-- New Pages Functionality --%>
         <li><a href="Rhombus.jsp">Rhombus</a></li>
         <li><a href="Parallelogram.jsp">Parallelogram</a></li>
         <li><a href="Octagon.jsp">Octagon</a></li>
@@ -49,4 +50,3 @@
 	</font>
 </body>
 </html>
-

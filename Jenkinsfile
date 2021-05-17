@@ -45,9 +45,8 @@ pipeline {
         stage('Deploy Database Container') {
           steps {
             fileOperations([
-              folderCopyOperation(sourceFolderPath: './scripts', destinationFolderPath: '/scripts')
+              folderCopyOperation(sourceFolderPath: './scripts', destinationFolderPath: '/home/ubuntu/scripts')
             ])
-            sh 'ls /'
             // sh """
             //   docker run -p 3306:3306 --name mysql-server \
             //     -v /scripts:/docker-entrypoint-initdb.d \

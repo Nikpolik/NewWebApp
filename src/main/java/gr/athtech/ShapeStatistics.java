@@ -12,7 +12,7 @@ public class ShapeStatistics {
       String pass = System.getenv("MYSQL_PASSWORD");
 			String connURL = "jdbc:mysql://172.17.0.1:3306/PAGE_VISITS";
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
-			Connection conn = DriverManager.getConnection(connURL, user, password);
+			Connection conn = DriverManager.getConnection(connURL, user, pass);
       return conn;
   }
 

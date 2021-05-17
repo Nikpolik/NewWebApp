@@ -7,8 +7,8 @@ RUN apt-get -y install wget
 
 WORKDIR /opt
 
-ENV DLLINK downloads.apache.org/tomcat/tomcat-10/v10.0.5/bin/
-ENV TOMCAT apache-tomcat-10.0.5
+ENV DLLINK downloads.apache.org/tomcat/tomcat-10/v10.0.6/bin/
+ENV TOMCAT apache-tomcat-10.0.6
 ENV TOMCATTZ ${TOMCAT}.tar.gz
 ENV TARGETD /opt/${TOMCAT}
 ENV MYSQL_USER root

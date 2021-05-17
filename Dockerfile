@@ -11,6 +11,8 @@ ENV DLLINK downloads.apache.org/tomcat/tomcat-10/v10.0.5/bin/
 ENV TOMCAT apache-tomcat-10.0.5
 ENV TOMCATTZ ${TOMCAT}.tar.gz
 ENV TARGETD /opt/${TOMCAT}
+ENV MYSQL_USER root
+ENV MYSQL_PASSWORD root
 
 # RUN wget https://downloads.apache.org/tomcat/tomcat-10/v10.0.5/bin/apache-tomcat-10.0.5.tar.gz 
 # RUN tar -xvzf apache-tomcat-10.0.5.tar.gz

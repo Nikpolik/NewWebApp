@@ -21,8 +21,7 @@ pipeline {
           }
           steps {
             echo 'Stopping previous running containers...'
-            sh "docker kill ${RUNNING_CONTAINERS}"
-            sh "docker rm ${RUNNING_CONTAINERS}"
+            sh "docker rm -f ${RUNNING_CONTAINERS}"
           }
         }
         stage('Build Web App') {

@@ -21,7 +21,7 @@ pipeline {
           }
           steps {
             echo 'Stopping previous running containers...'
-            sh "docker stop ${RUNNING_CONTAINERS}"
+            sh "docker kill ${RUNNING_CONTAINERS}"
             sh "docker rm ${RUNNING_CONTAINERS}"
           }
         }

@@ -44,9 +44,9 @@ pipeline {
         }
         stage('Deploy Database Container') {
           steps {
-            fileOperations {
+            fileOperations([
               folderCopyOperation(sourceFolderPath: './scripts', destinationFolderPath: '/scripts')
-            }
+            ])
             sh 'ls /'
             // sh """
             //   docker run -p 3306:3306 --name mysql-server \

@@ -25,9 +25,6 @@ pipeline {
             sh "docker rm ${RUNNING_CONTAINERS}"
           }
         }
-        stage('Clear Images') {
-          sh "docker rmi ${IMAGE_NAME}:latest"
-        }
         stage('Build Web App') {
           steps {
             echo 'Builing War file...'

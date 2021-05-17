@@ -46,8 +46,7 @@ pipeline {
           steps {
             sh """
               docker run -p 3306:3306 --name mysql-server \
-                -v /database/mysql:/var/lib/mysql \
-                -v /database/scripts:/docker-entrypoint-initdb.d \
+                -v /scripts:/docker-entrypoint-initdb.d \
                 -e MYSQL_ROOT_PASSWORD=${MYSQL_CRED_PSW} \
                 -e MYSQL_USER=${MYSQL_CRED_USR} \
                 -e MYSQL_PASSWORD=${MYSQL_CRED_PSW} \

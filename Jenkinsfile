@@ -46,6 +46,12 @@ pipeline {
             fileOperations([
               folderCopyOperation(sourceFolderPath: './scripts', destinationFolderPath: '/home/ubuntu/scripts')
             ])
+            echo """
+              docker run -p 3306:3306 --name mysql-server \
+                -v /home/ubuntu/scripts:/docker-entrypoint-initdb.d \
+                -e MYSQL_ROOT_PASSWORD=${MYSQL_CRED_PSW} \
+                -d mysql:latest
+            """
             sh """
               docker run -p 3306:3306 --name mysql-server \
                 -v /home/ubuntu/scripts:/docker-entrypoint-initdb.d \

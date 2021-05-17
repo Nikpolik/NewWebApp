@@ -45,7 +45,7 @@ pipeline {
         stage('Deploy Database Container') {
           steps {
             fileOperations {
-              folderCopyOperation('./scripts', '/scripts')
+              folderCopyOperation(sourceFolderPath: './scripts', destinationFolderPath: '/scripts')
             }
             sh 'ls /'
             // sh """

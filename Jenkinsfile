@@ -61,8 +61,7 @@ pipeline {
           steps {
             echo 'Running new image...'
             sh """
-              docker run --network="host" \
-                -p 8088:8080 \
+              docker run -p 8088:8080 \
                 -e MYSQL_ROOT_PASSWORD=${MYSQL_CRED_PSW} \
                 -e MYSQL_USER=${MYSQL_CRED_USR} \
                 -d ${IMAGE_NAME}:latest

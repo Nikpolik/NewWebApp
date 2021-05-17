@@ -10,9 +10,9 @@ public class ShapeStatistics {
 			// obtain a connection to the DB, use DB driver, URL, credentials
       String user = System.getenv("MYSQL_USER");
       String pass = System.getenv("MYSQL_PASSWORD");
-			String connURL = "jdbc:mysql://127.0.0.1:3306/PAGE_VISITS";
+			String connURL = "jdbc:mysql://172.17.0.1:3306/PAGE_VISITS";
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
-			Connection conn = DriverManager.getConnection(connURL, "root", "root");
+			Connection conn = DriverManager.getConnection(connURL, user, password);
       return conn;
   }
 

@@ -47,14 +47,14 @@ pipeline {
             fileOperations([
               folderCopyOperation(sourceFolderPath: './scripts', destinationFolderPath: '/home/ubuntu/scripts')
             ])
-            // sh """
-            //   docker run -p 3306:3306 --name mysql-server \
-            //     -v /scripts:/docker-entrypoint-initdb.d \
-            //     -e MYSQL_ROOT_PASSWORD=${MYSQL_CRED_PSW} \
-            //     -e MYSQL_USER=${MYSQL_CRED_USR} \
-            //     -e MYSQL_PASSWORD=${MYSQL_CRED_PSW} \
-            //     -d mysql:latest
-            // """
+            sh """
+              docker run -p 3306:3306 --name mysql-server \
+                -v /home/ubuntu/scripts:/docker-entrypoint-initdb.d \
+                -e MYSQL_ROOT_PASSWORD=${MYSQL_CRED_PSW} \
+                -e MYSQL_USER=${MYSQL_CRED_USR} \
+                -e MYSQL_PASSWORD=${MYSQL_CRED_PSW} \
+                -d mysql:latest
+            """
           }
         }
         stage('Deploy Webserver Container') {

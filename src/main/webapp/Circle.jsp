@@ -3,7 +3,10 @@
 <%@ page import = "java.sql.*"%>
 <%@ page import = "java.io.*" %>
 <%@ page import = "gr.athtech.ShapeStatistics" %>
-<%= System.getenv("MYSQL_PASSWORD") %>
+<%
+	ShapeStatistics.addPageVisit("Circle");
+%>
+<%= ShapeStatistics.getTotalVisits() %>
 <!DOCTYPE html>
 <html>
 <head>

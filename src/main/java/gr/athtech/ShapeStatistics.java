@@ -8,11 +8,10 @@ public class ShapeStatistics {
   
   private static Connection getConnection() throws  Exception {
 			// obtain a connection to the DB, use DB driver, URL, credentials
-      String user = System.getenv("MYSQL_USER");
       String pass = System.getenv("MYSQL_PASSWORD");
 			String connURL = "jdbc:mysql://172.17.0.1:3306/PAGE_VISITS";
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
-			Connection conn = DriverManager.getConnection(connURL, user, pass);
+			Connection conn = DriverManager.getConnection(connURL, "root", pass);
       return conn;
   }
 

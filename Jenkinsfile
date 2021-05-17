@@ -32,17 +32,17 @@ pipeline {
           }
         }
         stage ('Build Docker Image') {
-          sh 'ls -l'
-          sh 'pwd'
-          // steps {
-          //   echo 'Login in to dockerhub...'
-          //   sh "docker login -u ${DOCKER_CRED_USR} -p ${DOCKER_CRED_PSW}"
-          //   echo 'Building Image...'
-          //   sh "docker build -t ${IMAGE_NAME}:${BUILD_NUMBER} ."
-          //   sh "docker tag ${IMAGE_NAME}:${BUILD_NUMBER} ${IMAGE_NAME}:latest"
-          //   echo 'Publishing image...'
-          //   sh "docker push ${IMAGE_NAME}"
-          // }
+          steps {
+            sh 'ls -l'
+            sh 'pwd'
+            // echo 'Login in to dockerhub...'
+            // sh "docker login -u ${DOCKER_CRED_USR} -p ${DOCKER_CRED_PSW}"
+            // echo 'Building Image...'
+            // sh "docker build -t ${IMAGE_NAME}:${BUILD_NUMBER} ."
+            // sh "docker tag ${IMAGE_NAME}:${BUILD_NUMBER} ${IMAGE_NAME}:latest"
+            // echo 'Publishing image...'
+            // sh "docker push ${IMAGE_NAME}"
+          }
         }
         stage('Deploy Database Container') {
           steps {

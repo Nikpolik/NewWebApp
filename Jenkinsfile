@@ -33,27 +33,29 @@ pipeline {
         }
         stage ('Build Docker Image') {
           steps {
-            sh 'ls -l'
-            sh 'pwd'
-            // echo 'Login in to dockerhub...'
-            // sh "docker login -u ${DOCKER_CRED_USR} -p ${DOCKER_CRED_PSW}"
-            // echo 'Building Image...'
-            // sh "docker build -t ${IMAGE_NAME}:${BUILD_NUMBER} ."
-            // sh "docker tag ${IMAGE_NAME}:${BUILD_NUMBER} ${IMAGE_NAME}:latest"
-            // echo 'Publishing image...'
-            // sh "docker push ${IMAGE_NAME}"
+            echo 'Login in to dockerhub...'
+            sh "docker login -u ${DOCKER_CRED_USR} -p ${DOCKER_CRED_PSW}"
+            echo 'Building Image...'
+            sh "docker build -t ${IMAGE_NAME}:${BUILD_NUMBER} ."
+            sh "docker tag ${IMAGE_NAME}:${BUILD_NUMBER} ${IMAGE_NAME}:latest"
+            echo 'Publishing image...'
+            sh "docker push ${IMAGE_NAME}"
           }
         }
         stage('Deploy Database Container') {
           steps {
-            sh """
-              docker run -p 3306:3306 --name mysql-server \
-                -v /scripts:/docker-entrypoint-initdb.d \
-                -e MYSQL_ROOT_PASSWORD=${MYSQL_CRED_PSW} \
-                -e MYSQL_USER=${MYSQL_CRED_USR} \
-                -e MYSQL_PASSWORD=${MYSQL_CRED_PSW} \
-                -d mysql:latest
-            """
+            fileOperations {
+              folderCopyOperation('./scripts', '/scripts')
+            }
+            sh 'ls /'
+            // sh """
+            //   docker run -p 3306:3306 --name mysql-server \
+            //     -v /scripts:/docker-entrypoint-initdb.d \
+            //     -e MYSQL_ROOT_PASSWORD=${MYSQL_CRED_PSW} \
+            //     -e MYSQL_USER=${MYSQL_CRED_USR} \
+            //     -e MYSQL_PASSWORD=${MYSQL_CRED_PSW} \
+            //     -d mysql:latest
+            // """
           }
         }
         stage('Deploy Webserver Container') {

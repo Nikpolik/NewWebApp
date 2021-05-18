@@ -43,7 +43,7 @@ pipeline {
             echo 'Building db image'
             dir('database') {
               sh "docker build -t ${DB_IMAGE_NAME}:${BUILD_NUMBER} ."
-              sh "docker tag ${DB_IMAGE_NAME}:${BUILD_NUMBER} ${IMAGE_NAME}:latest"
+              sh "docker tag ${DB_IMAGE_NAME}:${BUILD_NUMBER} ${DB_IMAGE_NAME}:latest"
               sh "docker push ${DB_IMAGE_NAME}"
             }
           }

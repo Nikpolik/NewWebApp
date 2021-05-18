@@ -5,6 +5,7 @@ pipeline {
     }
     environment {
         IMAGE_NAME = 'nikpolik/newwebapp'
+        DB_IMAGE_NAME = 'nikpolik/mysql'
         RUNNING_CONTAINERS = sh (
                   script: 'docker ps -a -q | xargs',
                   returnStdout: true
@@ -30,33 +31,29 @@ pipeline {
             sh 'mvn clean package'
           }
         }
-        stage ('Build Docker Image') {
+        stage ('Build Docker Images') {
           steps {
             echo 'Login in to dockerhub...'
             sh "docker login -u ${DOCKER_CRED_USR} -p ${DOCKER_CRED_PSW}"
-            echo 'Building Image...'
+            echo 'Building webapp Image...'
             sh "docker build -t ${IMAGE_NAME}:${BUILD_NUMBER} ."
             sh "docker tag ${IMAGE_NAME}:${BUILD_NUMBER} ${IMAGE_NAME}:latest"
-            echo 'Publishing image...'
+            echo 'Publishing web app image...'
             sh "docker push ${IMAGE_NAME}"
+            echo 'Building db image'
+            dir('database') {
+              sh "docker build -t ${DB_IMAGE_NAME}:${BUILD_NUMBER} ."
+              sh "docker tag ${DB_IMAGE_NAME}:${BUILD_NUMBER} ${IMAGE_NAME}:latest"
+              sh "docker push ${DB_IMAGE_NAME}"
+            }
           }
         }
         stage('Deploy Database Container') {
           steps {
-            fileOperations([
-              folderCopyOperation(sourceFolderPath: './scripts', destinationFolderPath: '/etc/database/scripts')
-            ])
-            echo """
-              docker run -p 3306:3306 --name mysql-server \
-                -v /etc/database/scripts:/docker-entrypoint-initdb.d \
-                -e MYSQL_ROOT_PASSWORD=${MYSQL_CRED_PSW} \
-                -d mysql:latest
-            """
             sh """
               docker run -p 3306:3306 --name mysql-server \
-                -v /home/ubuntu/scripts:/docker-entrypoint-initdb.d \
                 -e MYSQL_ROOT_PASSWORD=${MYSQL_CRED_PSW} \
-                -d mysql:latest
+                -d ${DB_IMAGE_NAME}:latest
             """
           }
         }

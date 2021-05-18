@@ -52,7 +52,6 @@ pipeline {
           steps {
             sh """
               docker run -p 3306:3306 --name mysql-server \
-                -v /var/lib/mysql:/var/lib/mysql \
                 -e MYSQL_ROOT_PASSWORD=${MYSQL_CRED_PSW} \
                 -d ${DB_IMAGE_NAME}:latest
             """

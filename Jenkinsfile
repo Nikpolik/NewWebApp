@@ -6,7 +6,7 @@ pipeline {
     environment {
         IMAGE_NAME = 'nikpolik/newwebapp'
         RUNNING_CONTAINERS = sh (
-                  script: 'docker ps -a -q',
+                  script: 'docker ps -a -q | xargs',
                   returnStdout: true
               ).trim()
       DOCKER_CRED = credentials('nikpolik-docker')

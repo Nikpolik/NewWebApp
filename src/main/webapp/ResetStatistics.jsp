@@ -5,9 +5,10 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>View Statistics</title>
+<title>Reset Statistics</title>
 </head>
 <body bgcolor="FEF9E7">
-	<%= ShapeStatistics.getTotalVisits() %>
+	<% ShapeStatistics.resetPageVisits(); %>
+	<p>Page statistics reset</p>
 </body>
 </html>

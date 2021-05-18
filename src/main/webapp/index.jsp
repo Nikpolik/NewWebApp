@@ -34,6 +34,8 @@
         <li><a href="Rhombus.jsp">Rhombus</a></li>
         <li><a href="Parallelogram.jsp">Parallelogram</a></li>
         <li><a href="Octagon.jsp">Octagon</a></li>
+        <li><a href="ResetStatistics.jsp">Octagon</a></li>
+        <li><a href="ViewStatistics.jsp">Octagon</a></li>
     </ol>
     <br>
 	<br>

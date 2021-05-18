@@ -5,7 +5,7 @@ import java.util.Random;
 import java.io.*;
 
 public class ShapeStatistics {
-  
+
   private static Connection getConnection() throws  Exception {
 			// obtain a connection to the DB, use DB driver, URL, credentials
       String pass = System.getenv("MYSQL_PASSWORD");
@@ -13,6 +13,13 @@ public class ShapeStatistics {
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 			Connection conn = DriverManager.getConnection(connURL, "root", pass);
       return conn;
+  }
+
+  public static void resetPageVisits() throws Exception {
+    Connection conn = getConnection();
+    Statement stmt = conn.createStatement();
+    stmt.executeUpdate("TRUNCATE PAGE_VISITS");
+    stmt.close();
   }
 
   public static void addPageVisit(String shape) throws Exception {

@@ -1,0 +1,248 @@
+Started by GitHub push by Nikpolik
+Lightweight checkout support not available, falling back to full checkout.
+Checking out git https://github.com/Nikpolik/NewWebApp.git into /var/lib/jenkins/workspace/NewWebApp@script to read Jenkinsfile
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir /var/lib/jenkins/workspace/NewWebApp@script/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/Nikpolik/NewWebApp.git # timeout=10
+Fetching upstream changes from https://github.com/Nikpolik/NewWebApp.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.7.4'
+ > git fetch --tags --progress https://github.com/Nikpolik/NewWebApp.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+Seen branch in repository origin/add-octagon-parallelogram-shape
+Seen branch in repository origin/add-rhombus-index
+Seen branch in repository origin/main
+Seen 3 remote branches
+ > git show-ref --tags -d # timeout=10
+Checking out Revision 31d38fb43e20b2bb5462d99b875acd743cb22fec (origin/add-octagon-parallelogram-shape)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 31d38fb43e20b2bb5462d99b875acd743cb22fec # timeout=10
+Commit message: "fixup! Add Parallelogram.jsp"
+ > git rev-list --no-walk 240206086196e8d77d7f81bb9ff53acc2ac6f329 # timeout=10
+Running in Durability level: MAX_SURVIVABILITY
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/lib/jenkins/workspace/NewWebApp
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir /var/lib/jenkins/workspace/NewWebApp/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/Nikpolik/NewWebApp.git # timeout=10
+Fetching upstream changes from https://github.com/Nikpolik/NewWebApp.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.7.4'
+ > git fetch --tags --progress https://github.com/Nikpolik/NewWebApp.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+Seen branch in repository origin/add-octagon-parallelogram-shape
+Seen branch in repository origin/add-rhombus-index
+Seen branch in repository origin/main
+Seen 3 remote branches
+ > git show-ref --tags -d # timeout=10
+Checking out Revision 31d38fb43e20b2bb5462d99b875acd743cb22fec (origin/add-octagon-parallelogram-shape)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 31d38fb43e20b2bb5462d99b875acd743cb22fec # timeout=10
+Commit message: "fixup! Add Parallelogram.jsp"
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withCredentials
+Masking supported pattern matches of $DOCKER_CRED or $DOCKER_CRED_USR or $DOCKER_CRED_PSW
+[Pipeline] {
+[Pipeline] sh
++ docker ps -a -q
+[Pipeline] withEnv
+Warning: A secret was passed to "withEnv" using Groovy String interpolation, which is insecure.
+		 Affected argument(s) used the following variable(s): [DOCKER_CRED_USR]
+		 See https://jenkins.io/redirect/groovy-string-interpolation for details.
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Build Web App)
+[Pipeline] echo
+Builing War file...
+[Pipeline] sh
++ mvn clean package
+[INFO] Scanning for projects...
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building NewWebApp Maven Webapp 1.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-clean-plugin:3.1.0:clean (default-clean) @ NewWebApp ---
+[INFO] Deleting /var/lib/jenkins/workspace/NewWebApp/target
+[INFO] 
+[INFO] --- maven-resources-plugin:3.0.2:resources (default-resources) @ NewWebApp ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /var/lib/jenkins/workspace/NewWebApp/src/main/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.0:compile (default-compile) @ NewWebApp ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- maven-resources-plugin:3.0.2:testResources (default-testResources) @ NewWebApp ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /var/lib/jenkins/workspace/NewWebApp/src/test/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.0:testCompile (default-testCompile) @ NewWebApp ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.22.1:test (default-test) @ NewWebApp ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] --- maven-war-plugin:3.2.2:war (default-war) @ NewWebApp ---
+[INFO] Packaging webapp
+[INFO] Assembling webapp [NewWebApp] in [/var/lib/jenkins/workspace/NewWebApp/target/NewWebApp]
+[INFO] Processing war project
+[INFO] Copying webapp resources [/var/lib/jenkins/workspace/NewWebApp/src/main/webapp]
+[INFO] Webapp assembled in [82 msecs]
+[INFO] Building war: /var/lib/jenkins/workspace/NewWebApp/target/NewWebApp.war
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 3.748 s
+[INFO] Finished at: 2021-05-09T16:33:16+00:00
+[INFO] Final Memory: 11M/94M
+[INFO] ------------------------------------------------------------------------
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Build Docker Image)
+[Pipeline] echo
+Login in to dockerhub...
+[Pipeline] sh
++ docker login -u **** -p ****
+WARNING! Using --password via the CLI is insecure. Use --password-stdin.
+WARNING! Your password will be stored unencrypted in /var/lib/jenkins/.docker/config.json.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/engine/reference/commandline/login/#credentials-store
+Login Succeeded
+[Pipeline] echo
+Building Image...
+[Pipeline] sh
++ docker build -t ****/newwebapp:12 .
+Sending build context to Docker daemon  305.7kB
+Step 1/16 : FROM ubuntu:16.04
+ ---> aefd7f02ae24
+Step 2/16 : RUN apt-get -y update
+ ---> Using cache
+ ---> f581d9269c45
+Step 3/16 : RUN apt-get -y upgrade
+ ---> Using cache
+ ---> 1500fdac8f02
+Step 4/16 : RUN apt-get -y install default-jdk
+ ---> Using cache
+ ---> 2e2aa7b7e675
+Step 5/16 : RUN apt-get -y install wget
+ ---> Using cache
+ ---> b3b13a98fcdf
+Step 6/16 : WORKDIR /opt
+ ---> Using cache
+ ---> bed9d52949a0
+Step 7/16 : ENV DLLINK downloads.apache.org/tomcat/tomcat-10/v10.0.5/bin/
+ ---> Using cache
+ ---> 7985e98e48fd
+Step 8/16 : ENV TOMCAT apache-tomcat-10.0.5
+ ---> Using cache
+ ---> f509a0ba4ac9
+Step 9/16 : ENV TOMCATTZ ${TOMCAT}.tar.gz
+ ---> Using cache
+ ---> a9dc97f2cd90
+Step 10/16 : ENV TARGETD /opt/${TOMCAT}
+ ---> Using cache
+ ---> ba08176bdedc
+Step 11/16 : RUN wget ${DLLINK}/${TOMCATTZ}
+ ---> Using cache
+ ---> 922e252e40f5
+Step 12/16 : RUN tar -xvf ${TOMCATTZ}
+ ---> Using cache
+ ---> 26d0aef34f84
+Step 13/16 : EXPOSE 8080
+ ---> Using cache
+ ---> 765dc7b62c6a
+Step 14/16 : CMD exec ${TARGETD}/bin/catalina.sh run
+ ---> Using cache
+ ---> e03996b858fc
+Step 15/16 : ENV WAR target/NewWebApp.war
+ ---> Using cache
+ ---> 7cd0fb8d0d4e
+Step 16/16 : ADD ${WAR} ${TARGETD}/webapps
+ ---> 9ba6f9c02993
+Successfully built 9ba6f9c02993
+Successfully tagged ****/newwebapp:12
+[Pipeline] sh
++ docker tag ****/newwebapp:12 ****/newwebapp:latest
+[Pipeline] echo
+Publishing image...
+[Pipeline] sh
++ docker push ****/newwebapp
+Using default tag: latest
+The push refers to repository [docker.io/****/newwebapp]
+46770c6e0eb4: Preparing
+3a4c84b2405b: Preparing
+0fa4fa8e83d0: Preparing
+8c803570ccb6: Preparing
+2287f1320b0c: Preparing
+a95e8628e095: Preparing
+267d92f87498: Preparing
+1d5d9edd4bbc: Preparing
+fbb91e31093e: Preparing
+31dda91e27a1: Preparing
+16012e0c1d35: Preparing
+a95e8628e095: Waiting
+267d92f87498: Waiting
+1d5d9edd4bbc: Waiting
+fbb91e31093e: Waiting
+31dda91e27a1: Waiting
+16012e0c1d35: Waiting
+2287f1320b0c: Layer already exists
+0fa4fa8e83d0: Layer already exists
+8c803570ccb6: Layer already exists
+3a4c84b2405b: Layer already exists
+a95e8628e095: Layer already exists
+1d5d9edd4bbc: Layer already exists
+267d92f87498: Layer already exists
+fbb91e31093e: Layer already exists
+31dda91e27a1: Layer already exists
+16012e0c1d35: Layer already exists
+46770c6e0eb4: Pushed
+latest: digest: sha256:6aa916e6c164e7921c8913e2600ae3b7f527d5d462a102e36d16af6a568e9dab size: 2625
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Cleanup)
+[Pipeline] echo
+Stopping previous running containers...
+[Pipeline] sh
++ docker stop 9e31c94f85ab
+9e31c94f85ab
+[Pipeline] sh
++ docker rm 9e31c94f85ab
+9e31c94f85ab
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Deploy)
+[Pipeline] echo
+Running new image...
+[Pipeline] sh
++ docker run -d -p 8088:8080 ****/newwebapp:latest
+19337702da82a08bc0c0974f1da067deb67d9ece13c1c18a38f3182f0bb3dcaf
+[Pipeline] echo
+Deployed
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // withCredentials
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS

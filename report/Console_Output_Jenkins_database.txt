@@ -1,0 +1,330 @@
+
+Started by GitHub push by Nikpolik
+Obtained Jenkinsfile from git https://github.com/Nikpolik/NewWebApp.git
+Running in Durability level: MAX_SURVIVABILITY
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/lib/jenkins/workspace/NewWebApp
+[Pipeline] {​
+[Pipeline] stage
+[Pipeline] {​ (Declarative: Checkout SCM)
+[Pipeline] checkout
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir /var/lib/jenkins/workspace/NewWebApp/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/Nikpolik/NewWebApp.git # timeout=10
+Fetching upstream changes from https://github.com/Nikpolik/NewWebApp.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.7.4'
+ > git fetch --tags --progress https://github.com/Nikpolik/NewWebApp.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/main^{​commit}​ # timeout=10
+Checking out Revision ed3c45c5f4dffc827511b726be2ec9b2ece6b3cf (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f ed3c45c5f4dffc827511b726be2ec9b2ece6b3cf # timeout=10
+Commit message: "Fix link titles"
+ > git rev-list --no-walk f46e4bbd7643dfc4740d8ecdd091fc02a08545be # timeout=10
+[Pipeline] }​
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {​
+[Pipeline] withCredentials
+Masking supported pattern matches of $DOCKER_CRED or $DOCKER_CRED_USR or $DOCKER_CRED_PSW or $MYSQL_CRED or $MYSQL_CRED_USR or $MYSQL_CRED_PSW
+[Pipeline] {​
+[Pipeline] sh
++ xargs
++ docker ps -a -q
+[Pipeline] withEnv
+Warning: A secret was passed to "withEnv" using Groovy String interpolation, which is insecure.
+		 Affected argument(s) used the following variable(s): [DOCKER_CRED_USR]
+		 See https://jenkins.io/redirect/groovy-string-interpolation for details.
+[Pipeline] {​
+[Pipeline] stage
+[Pipeline] {​ (Stop Instanses)
+[Pipeline] echo
+Stopping previous running containers...
+[Pipeline] sh
++ docker rm -f c959dfeb9f6d c3e01c0504ae
+c959dfeb9f6d
+c3e01c0504ae
+[Pipeline] }​
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] {​ (Build Web App)
+[Pipeline] echo
+Builing War file...
+[Pipeline] sh
++ mvn clean package
+[INFO] Scanning for projects...
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building NewWebApp Maven Webapp 1.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-clean-plugin:3.1.0:clean (default-clean) @ NewWebApp ---
+[INFO] Deleting /var/lib/jenkins/workspace/NewWebApp/target
+[INFO] 
+[INFO] --- maven-resources-plugin:3.0.2:resources (default-resources) @ NewWebApp ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /var/lib/jenkins/workspace/NewWebApp/src/main/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.0:compile (default-compile) @ NewWebApp ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 1 source file to /var/lib/jenkins/workspace/NewWebApp/target/classes
+[INFO] 
+[INFO] --- maven-resources-plugin:3.0.2:testResources (default-testResources) @ NewWebApp ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /var/lib/jenkins/workspace/NewWebApp/src/test/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.0:testCompile (default-testCompile) @ NewWebApp ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.22.1:test (default-test) @ NewWebApp ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] --- maven-war-plugin:3.2.2:war (default-war) @ NewWebApp ---
+[INFO] Packaging webapp
+[INFO] Assembling webapp [NewWebApp] in [/var/lib/jenkins/workspace/NewWebApp/target/NewWebApp]
+[INFO] Processing war project
+[INFO] Copying webapp resources [/var/lib/jenkins/workspace/NewWebApp/src/main/webapp]
+[INFO] Webapp assembled in [79 msecs]
+[INFO] Building war: /var/lib/jenkins/workspace/NewWebApp/target/NewWebApp.war
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 4.406 s
+[INFO] Finished at: 2021-05-18T18:05:41+00:00
+[INFO] Final Memory: 15M/86M
+[INFO] ------------------------------------------------------------------------
+[Pipeline] }​
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] {​ (Build Docker Images)
+[Pipeline] echo
+Login in to dockerhub...
+[Pipeline] sh
+Warning: A secret was passed to "sh" using Groovy String interpolation, which is insecure.
+		 Affected argument(s) used the following variable(s): [DOCKER_CRED_USR, DOCKER_CRED_PSW]
+		 See https://jenkins.io/redirect/groovy-string-interpolation for details.
++ docker login -u **** -p ****
+WARNING! Using --password via the CLI is insecure. Use --password-stdin.
+WARNING! Your password will be stored unencrypted in /var/lib/jenkins/.docker/config.json.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/engine/reference/commandline/login/#credentials-store
+
+Login Succeeded
+[Pipeline] echo
+Building webapp Image...
+[Pipeline] sh
+Warning: A secret was passed to "sh" using Groovy String interpolation, which is insecure.
+		 Affected argument(s) used the following variable(s): [DOCKER_CRED_USR]
+		 See https://jenkins.io/redirect/groovy-string-interpolation for details.
++ docker build -t ****/newwebapp:75 .
+Sending build context to Docker daemon  8.783MB
+
+Step 1/18 : FROM ubuntu:16.04
+ ---> aefd7f02ae24
+Step 2/18 : RUN apt-get -y update
+ ---> Using cache
+ ---> 0e55e7cc734e
+Step 3/18 : RUN apt-get -y upgrade
+ ---> Using cache
+ ---> ebca4d0520fd
+Step 4/18 : RUN apt-get -y install default-jdk
+ ---> Using cache
+ ---> 45649dcdd360
+Step 5/18 : RUN apt-get -y install wget
+ ---> Using cache
+ ---> a169d1fa6e28
+Step 6/18 : WORKDIR /opt
+ ---> Using cache
+ ---> 103029cb621d
+Step 7/18 : ENV DLLINK downloads.apache.org/tomcat/tomcat-10/v10.0.6/bin/
+ ---> Using cache
+ ---> a7797849895d
+Step 8/18 : ENV TOMCAT apache-tomcat-10.0.6
+ ---> Using cache
+ ---> 14744bfe0bdc
+Step 9/18 : ENV TOMCATTZ ${​TOMCAT}​.tar.gz
+ ---> Using cache
+ ---> b08358a7feab
+Step 10/18 : ENV TARGETD /opt/${​TOMCAT}​
+ ---> Using cache
+ ---> bda94aa27b12
+Step 11/18 : ENV MYSQL_USER ****
+ ---> Using cache
+ ---> eb141e1df5ce
+Step 12/18 : ENV MYSQL_PASSWORD ****
+ ---> Using cache
+ ---> 12f4c296f12d
+Step 13/18 : RUN wget ${​DLLINK}​/${​TOMCATTZ}​
+ ---> Using cache
+ ---> a1be74e366c2
+Step 14/18 : RUN tar -xvf ${​TOMCATTZ}​
+ ---> Using cache
+ ---> 3af13275d264
+Step 15/18 : EXPOSE 8080
+ ---> Using cache
+ ---> adfabe5f2656
+Step 16/18 : CMD exec ${​TARGETD}​/bin/catalina.sh run
+ ---> Using cache
+ ---> 6bb92783abe3
+Step 17/18 : ENV WAR target/NewWebApp.war
+ ---> Using cache
+ ---> af5a8a596d91
+Step 18/18 : ADD ${​WAR}​ ${​TARGETD}​/webapps
+ ---> ceaf084458a9
+Successfully built ceaf084458a9
+Successfully tagged ****/newwebapp:75
+[Pipeline] sh
+Warning: A secret was passed to "sh" using Groovy String interpolation, which is insecure.
+		 Affected argument(s) used the following variable(s): [DOCKER_CRED_USR]
+		 See https://jenkins.io/redirect/groovy-string-interpolation for details.
++ docker tag ****/newwebapp:75 ****/newwebapp:latest
+[Pipeline] echo
+Publishing web app image...
+[Pipeline] sh
+Warning: A secret was passed to "sh" using Groovy String interpolation, which is insecure.
+		 Affected argument(s) used the following variable(s): [DOCKER_CRED_USR]
+		 See https://jenkins.io/redirect/groovy-string-interpolation for details.
++ docker push ****/newwebapp
+Using default tag: latest
+The push refers to repository [docker.io/****/newwebapp]
+ddea26a45dda: Preparing
+326445635d3a: Preparing
+985045faae2d: Preparing
+17c985a7415e: Preparing
+0f05bf556307: Preparing
+bae632775ec4: Preparing
+3004111ce4ed: Preparing
+1d5d9edd4bbc: Preparing
+fbb91e31093e: Preparing
+31dda91e27a1: Preparing
+16012e0c1d35: Preparing
+bae632775ec4: Waiting
+3004111ce4ed: Waiting
+1d5d9edd4bbc: Waiting
+fbb91e31093e: Waiting
+31dda91e27a1: Waiting
+16012e0c1d35: Waiting
+0f05bf556307: Layer already exists
+326445635d3a: Layer already exists
+985045faae2d: Layer already exists
+17c985a7415e: Layer already exists
+3004111ce4ed: Layer already exists
+1d5d9edd4bbc: Layer already exists
+bae632775ec4: Layer already exists
+fbb91e31093e: Layer already exists
+31dda91e27a1: Layer already exists
+16012e0c1d35: Layer already exists
+ddea26a45dda: Pushed
+latest: digest: sha256:c804ef3d526a42cadab2e1003210ad7f518e99e7dea45a2b84d10c4625ed1a81 size: 2631
+[Pipeline] echo
+Building db image
+[Pipeline] dir
+Running in /var/lib/jenkins/workspace/NewWebApp/database
+[Pipeline] {​
+[Pipeline] sh
+Warning: A secret was passed to "sh" using Groovy String interpolation, which is insecure.
+		 Affected argument(s) used the following variable(s): [DOCKER_CRED_USR]
+		 See https://jenkins.io/redirect/groovy-string-interpolation for details.
++ docker build -t ****/mysql:75 .
+Sending build context to Docker daemon  3.072kB
+
+Step 1/2 : FROM mysql:latest
+ ---> c0cdc95609f1
+Step 2/2 : COPY *.sql /docker-entrypoint-initdb.d/
+ ---> Using cache
+ ---> 2d8937f391c0
+Successfully built 2d8937f391c0
+Successfully tagged ****/mysql:75
+[Pipeline] sh
+Warning: A secret was passed to "sh" using Groovy String interpolation, which is insecure.
+		 Affected argument(s) used the following variable(s): [DOCKER_CRED_USR]
+		 See https://jenkins.io/redirect/groovy-string-interpolation for details.
++ docker tag ****/mysql:75 ****/mysql:latest
+[Pipeline] sh
+Warning: A secret was passed to "sh" using Groovy String interpolation, which is insecure.
+		 Affected argument(s) used the following variable(s): [DOCKER_CRED_USR]
+		 See https://jenkins.io/redirect/groovy-string-interpolation for details.
++ docker push ****/mysql
+Using default tag: latest
+The push refers to repository [docker.io/****/mysql]
+331cefa6e95c: Preparing
+03a007e88ba3: Preparing
+d605c112cfab: Preparing
+74634a9cf30b: Preparing
+ea5fd90d1e58: Preparing
+cffd1f984514: Preparing
+3182d4b853f0: Preparing
+ae477702a513: Preparing
+570df12e998c: Preparing
+b2abc2ad4a41: Preparing
+e82f328cb5e6: Preparing
+14be0d40572c: Preparing
+02c055ef67f5: Preparing
+cffd1f984514: Waiting
+3182d4b853f0: Waiting
+ae477702a513: Waiting
+570df12e998c: Waiting
+b2abc2ad4a41: Waiting
+e82f328cb5e6: Waiting
+14be0d40572c: Waiting
+02c055ef67f5: Waiting
+03a007e88ba3: Layer already exists
+ea5fd90d1e58: Layer already exists
+331cefa6e95c: Layer already exists
+d605c112cfab: Layer already exists
+74634a9cf30b: Layer already exists
+cffd1f984514: Layer already exists
+ae477702a513: Layer already exists
+3182d4b853f0: Layer already exists
+570df12e998c: Layer already exists
+b2abc2ad4a41: Layer already exists
+e82f328cb5e6: Layer already exists
+02c055ef67f5: Layer already exists
+14be0d40572c: Layer already exists
+latest: digest: sha256:394073174aaf878922a136fe44acffb4bdd77557b0426b124acfd18612e20f0c size: 3035
+[Pipeline] }​
+[Pipeline] // dir
+[Pipeline] }​
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] {​ (Deploy Database Container)
+[Pipeline] sh
+Warning: A secret was passed to "sh" using Groovy String interpolation, which is insecure.
+		 Affected argument(s) used the following variable(s): [MYSQL_CRED_USR, MYSQL_CRED_PSW, DOCKER_CRED_USR]
+		 See https://jenkins.io/redirect/groovy-string-interpolation for details.
++ docker run -p 3306:3306 --name mysql-server -e MYSQL_ROOT_PASSWORD=**** -d ****/mysql:latest
+8ae7126c6cae0237eee15d73cf7e2d8259f200b51640692564b18713cd79a1e1
+[Pipeline] }​
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] {​ (Deploy Webserver Container)
+[Pipeline] echo
+Running new image...
+[Pipeline] sh
+Warning: A secret was passed to "sh" using Groovy String interpolation, which is insecure.
+		 Affected argument(s) used the following variable(s): [MYSQL_CRED_USR, MYSQL_CRED_PSW, DOCKER_CRED_USR]
+		 See https://jenkins.io/redirect/groovy-string-interpolation for details.
++ docker run -p 8088:8080 -e MYSQL_ROOT_PASSWORD=**** -e MYSQL_USER=**** -d ****/newwebapp:latest
+ec16e2c2662694464767acfccd4296e9beb7375805f9323e317ab0ec0cda50d5
+[Pipeline] }​
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] {​ (Declarative: Post Actions)
+[Pipeline] echo
+Deploy Succeeded
+[Pipeline] }​
+[Pipeline] // stage
+[Pipeline] }​
+[Pipeline] // withEnv
+[Pipeline] }​
+[Pipeline] // withCredentials
+[Pipeline] }​
+[Pipeline] // withEnv
+[Pipeline] }​
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS
